@@ -6,6 +6,12 @@ import java.io.*;
 
 
 public class project{
+
+    public static void NormalizeData() {
+         // Do something here
+     }
+
+
       public static void main (String args[]){
       List<Double> Labels = new ArrayList<Double>();
       List<String> lines =  new ArrayList<String>();
@@ -22,8 +28,6 @@ public class project{
               String[] data = line.split("\\s+");
               lines.add(line);
               Labels.add(Double.parseDouble(data[1]));
-
-
       	    }
     		} catch (IOException e) {
     			e.printStackTrace();
@@ -31,19 +35,16 @@ public class project{
         String forSize = lines.get(0);
         String[] FeatureSize =   forSize.split("\\s+");
         Double[][] features = new Double[lines.size()][FeatureSize.length - 2];
-
         for(int i = 0; i < lines.size(); i++){
             String temp = lines.get(i);
             String[] firstLine =   temp.split("\\s+");
             for(int j = 2; j < firstLine.length; j++){
+              mean= Double.parseDouble( firstLine[j] ) +mean;
               features[i][j-2] = Double.parseDouble( firstLine[j] );
             }
-
         }
-        System.out.println(features[99][9]);
-
+        mean = mean/ ((FeatureSize.length - 2) * lines.size());
     }
-
 
 
  }
