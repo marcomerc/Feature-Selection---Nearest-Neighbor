@@ -1,0 +1,10 @@
+for parse doubles
+https://stackoverflow.com/questions/5769669/convert-string-to-double-in-java
+
+
+
+
+for userinput 
+http://www.avajava.com/tutorials/lessons/how-do-i-read-a-string-from-a-file-line-by-line.html
+
+
