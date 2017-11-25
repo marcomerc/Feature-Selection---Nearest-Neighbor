@@ -33,18 +33,15 @@ public class project{
         Double[][] features = new Double[lines.size()][FeatureSize.length - 2];
 
         for(int i = 0; i < lines.size(); i++){
-          String temp = lines.get(i);
-          String[] firstLine =   temp.split("\\s+");
-          for(int j = 2; j <firstLine.length; j++){
-            features[i][j] = Double.parseDouble( firstLine[i] );
-
-          }
+            String temp = lines.get(i);
+            String[] firstLine =   temp.split("\\s+");
+            for(int j = 2; j < firstLine.length; j++){
+              features[i][j-2] = Double.parseDouble( firstLine[j] );
+            }
 
         }
-        // Features.add(Double.parseDouble( data[i] ) );
-        // mean = mean + data[i];
-        // String[] data = line.split("\\s+");
-        // System.out.println(data[2]);
+        System.out.println(features[99][9]);
+
     }
 
 
