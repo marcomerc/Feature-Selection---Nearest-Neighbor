@@ -4,20 +4,54 @@ import java.util.*;
 import java.util.Scanner;
 import java.io.*;
 import java.lang.Math;
+import java.util.List;
+import java.util.ArrayList;
 
 public class project{
 
-    public double NearestNeighbor(Double[][] data,int []features) {
+    public double NearestNeighbor(Double[][] data,List<Integer> features,List<Double> Labels ) {
+            int loc = 0;
+            double minD = 0.0;
+            double p = 0.0;
+            double[] cross = new double[Labels.size()];
 
-      double foo = 0.0;
+            for(int k = 0; k < Labels.size();k++){
 
+              for(int j = 0; j < features.size();j++){
+                p = p + data[k][features.get(j)];
+              }
+              for(int i = 0; i <Labels.size(); i++){
+                double distance = 0.0;
+                for(int j = 0; j < features.size(); j++){
+                  distance = distance + data[i][features.get(j)];
+                }
+                if(k != i){
+                  if (i ==  1){
+                    minD = Math.abs(distance - p);
+                    loc = i;
+                  }else if (Math.abs(distance - p) < minD ){
+                     loc = i;
+                     minD = Math.abs(distance - p);
+                   }
+                 }
+              }
+              cross[k] = Labels.get(loc);
+            }
+            int count = 0;
+            for(int i = 0; i < Labels.size();i++){
+              if (Labels.get(i) ==  cross[i]){
+                count += 1;
+              }
+            }
+            return count/ Labels.size();
+     }
 
-      return foo;
-         // Do something here
+     public double NearestNeighbor(Double[][] data,int featuresSize,List<Double> Labels ) {
+
      }
 
 
-      public static void main (String args[]){
+      public  void main (String args[]){
       List<Double> Labels = new ArrayList<Double>();
       List<String> lines =  new ArrayList<String>();
       double mean  = 0;
@@ -71,8 +105,9 @@ public class project{
           }
         }
 
-        // int[] f =  new int[
-        // NearestNeighbor(features, )
+        List<Integer> fa = new ArrayList<Integer>();
+        double point=3.50;
+        double wow =NearestNeighbor(features, sizeF, Labels );
 
 
 
