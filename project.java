@@ -46,7 +46,31 @@ public class project{
             return count/ Labels.size();
      }
 
-     public double NearestNeighbor(Double[][] data,int featuresSize,List<Double> Labels ) {
+     public double forward(Double[][] data,int featuresSize,List<Double> Labels ) {
+        List<Integer> features =  new ArrayList<Integer>();
+        int loc =0;
+        double previousPer = 0.0;
+        for(int i = 0; i < featuresSize; i++){
+          for(int j = 0; j < featuresSize; j++){
+                if ( features.contains(j)){
+                      features.add(j);
+                      double percentageRight = NearestNeighbor(data,features,Labels);
+                      if (j == 0){
+                        loc = j;
+                        previousPer = percentageRight;
+                      }else if(previousPer < percentageRight){
+                        loc = j;
+                        previousPer = percentageRight;
+
+                      }
+                      features.remove(j);
+                }
+          }
+          features.add(loc);
+        }
+        
+
+
 
      }
 
@@ -107,7 +131,7 @@ public class project{
 
         List<Integer> fa = new ArrayList<Integer>();
         double point=3.50;
-        double wow =NearestNeighbor(features, sizeF, Labels );
+        double wow =NearestNeighbor(features, fa, Labels );
 
 
 
