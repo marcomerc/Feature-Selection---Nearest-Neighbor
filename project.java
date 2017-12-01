@@ -9,15 +9,14 @@ import java.util.ArrayList;
 
 public class project{
 
-    public double NearestNeighbor(Double[][] data,List<Integer> features,List<Double> Labels ) {
+    public static double NearestNeighbor(Double[][] data,List<Integer> features,List<Double> Labels ) {
             int loc = 0;
             double minD = 0.0;
             double p = 0.0;
             double[] cross = new double[Labels.size()];
-
             for(int k = 0; k < Labels.size();k++){
-
               for(int j = 0; j < features.size();j++){
+                // System.out.println(features.get(j));
                 p = p + data[k][features.get(j)];
               }
               for(int i = 0; i <Labels.size(); i++){
@@ -46,36 +45,39 @@ public class project{
             return count/ Labels.size();
      }
 
-     public double forward(Double[][] data,int featuresSize,List<Double> Labels ) {
+     public static double forward(Double[][] data,int featuresSize,List<Double> Labels ) {
         List<Integer> features =  new ArrayList<Integer>();
+        List<Integer> percent =  new ArrayList<Integer>();
         int loc =0;
         double previousPer = 0.0;
         for(int i = 0; i < featuresSize; i++){
           for(int j = 0; j < featuresSize; j++){
-                if ( features.contains(j)){
-                      features.add(j);
-                      double percentageRight = NearestNeighbor(data,features,Labels);
+                 if ( !features.contains(j)){
+                       features.add(j);
+                  System.out.println(j);
+                double percentageRight = NearestNeighbor(data,features,Labels);
                       if (j == 0){
                         loc = j;
                         previousPer = percentageRight;
-                      }else if(previousPer < percentageRight){
+                }
+                else if(previousPer < percentageRight){
                         loc = j;
                         previousPer = percentageRight;
+                        System.out.println(previousPer);
 
                       }
                       features.remove(j);
-                }
           }
+        }
+          // System.out.println(previousPer);
           features.add(loc);
         }
-        
-
-
+        return previousPer;
 
      }
 
 
-      public  void main (String args[]){
+      public  static void main (String args[]){
       List<Double> Labels = new ArrayList<Double>();
       List<String> lines =  new ArrayList<String>();
       double mean  = 0;
@@ -130,9 +132,8 @@ public class project{
         }
 
         List<Integer> fa = new ArrayList<Integer>();
-        double point=3.50;
         double wow =NearestNeighbor(features, fa, Labels );
-
+        forward(features,sizeF-2,Labels);
 
 
 
