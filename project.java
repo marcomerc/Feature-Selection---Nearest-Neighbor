@@ -47,31 +47,75 @@ public class project{
 
      public static double forward(Double[][] data,int featuresSize,List<Double> Labels ) {
         List<Integer> features =  new ArrayList<Integer>();
-        List<Integer> percent =  new ArrayList<Integer>();
-        int loc =0;
-        double previousPer = 0.0;
+        List<Double> percent =  new ArrayList<Double>();
+
+
+        int numI = -1;
         for(int i = 0; i < featuresSize; i++){
+          int loc =0;
+          double previousPer = 0.0;
           for(int j = 0; j < featuresSize; j++){
                  if ( !features.contains(j)){
-                       features.add(j);
-                  // System.out.println(j);
-                double percentageRight = NearestNeighbor(data,features,Labels);
-                      if (j == 0){
-                        loc = j;
-                        previousPer = percentageRight;
-                }
-                else if(previousPer < percentageRight){
-                        loc = j;
-                        previousPer = percentageRight;
-                        System.out.println(previousPer);
+                     features.add(j);
+                     numI = numI+1;
+                     double percentageRight = NearestNeighbor(data,features,Labels);
 
-                      }
-                      features.remove(j);
+                     System.out.print("Using feature(s) {");
+                     for(int m = 0; m < features.size();m++){
+                       System.out.print(features.get(m));
+                     }
+                     System.out.print("} accuracy is ");
+                     System.out.print(percentageRight);
+                     System.out.print("%\n");
+                     if (j == 0){
+
+                            loc = j;
+                            previousPer = percentageRight;
+                     }
+                    if(previousPer < percentageRight){
+                            loc = j;
+                            previousPer = percentageRight;
+                    }
+
+                    features.remove(numI);
+                    numI = numI-1;
+                  }
           }
-        }
+
+        if(!percent.isEmpty() && previousPer < percent.get(percent.size()-1)){
+
+
+          percent.add(previousPer);
           features.add(loc);
+
+          System.out.print("(Warning, Accuracy has decreased! Continuing search in case of local maxima) \nFeature set { ");
+          for(int m = 0; m + 1 < features.size();m++){
+            System.out.print(features.get(m));
+          }
+          System.out.print("} was best, accuracy is  ");
+          System.out.print(percent.get(percent.size()-2));
+          System.out.print("%\n");
+          numI = numI+1;
+        break;
+
+        } else{
+                percent.add(previousPer);
+                features.add(loc);
+                System.out.print("Feature set {");
+                for(int m = 0; m < features.size();m++){
+                  System.out.print(features.get(m));
+                }
+                System.out.print("} was the best, accuracy is ");
+                System.out.print(percent.get(percent.size()-1));
+                System.out.print("%\n");
+                numI = numI+1;
         }
-        return previousPer;
+
+
+}
+
+
+        return percent.get(percent.size()-2);
 
      }
 
@@ -118,15 +162,15 @@ public class project{
                 mean = mean  + features[j][i];
             }
             mean = mean / Labels.size();
-            System.out.println("mean");
-            System.out.println(mean);
+            // System.out.println("mean");
+            // System.out.println(mean);
             double stDiv = 0.0;
             for (int j = 0; j < Labels.size(); j++){
                 stDiv = stDiv + Math.pow(features[j][i] - mean,2);
             }
             stDiv = Math.sqrt(stDiv/ Labels.size());
-            System.out.println("stDiv");
-            System.out.println(stDiv);
+            // System.out.println("stDiv");
+            // System.out.println(stDiv);
 
             for (int j = 0; j < Labels.size(); j++){
                 features[j][i] = (features[j][i] - mean)/stDiv;
@@ -143,8 +187,9 @@ public class project{
         List<Integer> fa = new ArrayList<Integer>();
         fa.add(3);
         fa.add(7);
-        double wow = NearestNeighbor(features, fa, Labels );
-        forward(features,sizeF,Labels);
+        double wow  = NearestNeighbor(features, fa, Labels );
+        // double wow = forward(features,sizeF,Labels);
+        
 
 
 
