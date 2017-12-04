@@ -14,48 +14,35 @@ public class project{
             double[] cross = new double[Labels.size()];
             // for all labesl
             for(int k = 0; k < Labels.size();k++){
-              int loc = -1;
-              double minD = 0.0;
-              for(int i = 0; i <Labels.size(); i++){
-                double distance = 0.0;
-
-                    //geting the disatance for each other labels feature and comparing
-                    for(int w = 0; w < features.size(); w++){
-                        if(k != i){
-                            distance = distance + Math.pow(data[k][features.get(w)] - data[i][features.get(w)],2);
-                        }
-                    }
-                    distance = Math.sqrt(distance);
-                    if(k != i){
-                        if (i ==  1 && features.size() !=0 ){
-                            minD = distance;
-                            loc = i;
-                        }else if ( distance < minD && features.size() !=0){
-                             loc = i;
-                             minD = distance;
-                        }
-                    }
-               }
-              if(loc != -1){
+                int loc = 0;
+                double minD = -1;
+                for(int i = 0; i <Labels.size(); i++){
+                  double distance = 0.0;
+                  if(k != i){
+                      for(int w = 0; w < features.size(); w++){
+                          distance = distance + Math.pow(data[k][features.get(w)] - data[i][features.get(w)],2);
+                      }
+                      distance = Math.sqrt(distance);
+                      if(minD == -1){
+                        minD = distance;
+                        loc = i;
+                      }else if(distance < minD ){
+                        minD = distance;
+                        loc = i;
+                      }
+                  }
+                }
                 cross[k] = Labels.get(loc);
-                // System.out.println(Labels.get(loc));
-              }else{
-                cross[k] = -1;
-              }
-
           }
-
-
-
             int count = 0;
             for(int i = 0; i < Labels.size();i++){
               if (Labels.get(i) ==  cross[i]){
-                count += 1;
+                count = count+ 1;
               }
             }
-            System.out.println(Labels.size());
-              System.out.println(count);
-            return count/ Labels.size();
+            double coun = count;
+            coun = coun/ Labels.size();
+            return coun;
      }
 
      public static double forward(Double[][] data,int featuresSize,List<Double> Labels ) {
@@ -67,7 +54,7 @@ public class project{
           for(int j = 0; j < featuresSize; j++){
                  if ( !features.contains(j)){
                        features.add(j);
-                  System.out.println(j);
+                  // System.out.println(j);
                 double percentageRight = NearestNeighbor(data,features,Labels);
                       if (j == 0){
                         loc = j;
@@ -82,7 +69,6 @@ public class project{
                       features.remove(j);
           }
         }
-          // System.out.println(previousPer);
           features.add(loc);
         }
         return previousPer;
@@ -128,27 +114,37 @@ public class project{
             double mean = 0.0;
             // calculates the mean
             for (int j = 0; j < Labels.size(); j++){
+                // System.out.println(features[j][i]);
                 mean = mean  + features[j][i];
             }
             mean = mean / Labels.size();
+            System.out.println("mean");
+            System.out.println(mean);
             double stDiv = 0.0;
             for (int j = 0; j < Labels.size(); j++){
                 stDiv = stDiv + Math.pow(features[j][i] - mean,2);
             }
             stDiv = Math.sqrt(stDiv/ Labels.size());
+            System.out.println("stDiv");
+            System.out.println(stDiv);
 
             for (int j = 0; j < Labels.size(); j++){
                 features[j][i] = (features[j][i] - mean)/stDiv;
             }
 
+
+
         }
+        System.out.println(features[0][0]);
+        System.out.println(features[1][1]);
+
 
 
         List<Integer> fa = new ArrayList<Integer>();
-        fa.add(4);
-        fa.add(8);
+        fa.add(3);
+        fa.add(7);
         double wow = NearestNeighbor(features, fa, Labels );
-        // forward(features,sizeF-2,Labels);
+        forward(features,sizeF,Labels);
 
 
 
