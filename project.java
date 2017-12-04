@@ -10,44 +10,40 @@ import java.util.ArrayList;
 public class project{
 
     public static double NearestNeighbor(Double[][] data,List<Integer> features,List<Double> Labels ) {
-
             /// redo the distance formula for the NearestNeighbor
             double[] cross = new double[Labels.size()];
+            // for all labesl
             for(int k = 0; k < Labels.size();k++){
-              double p = 0.0;
               int loc = -1;
-
-              // getting the features that we will use
-              for(int j = 0; j < features.size();j++){
-                // System.out.println(features.get(j));
-                p = p + data[k][features.get(j)];
-                // System.out.println(p);
-              }
               double minD = 0.0;
               for(int i = 0; i <Labels.size(); i++){
-              double distance = 0.0;
-              //geting the disatance for each other point and comparing
-              for(int w = 0; w < features.size(); w++){
-                distance = distance + data[i][features.get(w)];
-                // System.out.println(distance);
-              }
-                if(k != i){
-                  if (i ==  1){
-                    minD = Math.abs(distance - p);
-                    loc = i;
-                  }else if (Math.abs(distance - p) < minD ){
-                     loc = i;
-                     minD = Math.abs(distance - p);
-                   }
-                 }
+                double distance = 0.0;
 
+                    //geting the disatance for each other labels feature and comparing
+                    for(int w = 0; w < features.size(); w++){
+                        if(k != i){
+                            distance = distance + Math.pow(data[k][features.get(w)] - data[i][features.get(w)],2);
+                        }
+                    }
+                    distance = Math.sqrt(distance);
+                    if(k != i){
+                        if (i ==  1 && features.size() !=0 ){
+                            minD = distance;
+                            loc = i;
+                        }else if ( distance < minD && features.size() !=0){
+                             loc = i;
+                             minD = distance;
+                        }
+                    }
+               }
               if(loc != -1){
                 cross[k] = Labels.get(loc);
                 // System.out.println(Labels.get(loc));
+              }else{
+                cross[k] = -1;
               }
-            }
-          }
 
+          }
 
 
 
@@ -97,7 +93,6 @@ public class project{
       public  static void main (String args[]){
       List<Double> Labels = new ArrayList<Double>();
       List<String> lines =  new ArrayList<String>();
-      double mean  = 0;
       int sizeF = 0;
       // Scanner scan = new Scanner(System.in);
       // String fileName = scan.nextLine();
@@ -125,38 +120,33 @@ public class project{
             String[] firstLine =   temp.split("\\s+");
             sizeF = firstLine.length;
             for(int j = 2; j < firstLine.length; j++){
-              mean= Double.parseDouble( firstLine[j] ) +mean;
               features[i][j-2] = Double.parseDouble( firstLine[j] );
             }
         }
-        // the above gets it into an array dont mess with it !
-        mean = mean/ ((FeatureSize.length - 2) * lines.size());
-        double stDiv = 0;
-        // subtraacting mean and then squaring it
-        for(int i = 0; i < Labels.size(); i++){
-          for(int j = 2; j < sizeF; j++){
-            stDiv = stDiv + Math.pow(features[i][j-2] - mean,2.0);
-          }
-        }
-        //finishing getting the standrd deviation
-        stDiv = stDiv / ((FeatureSize.length - 2) * lines.size());
-        stDiv = Math.sqrt (stDiv);
+        sizeF = FeatureSize.length - 2;
+        for(int i  = 0;  i< sizeF; i++){
+            double mean = 0.0;
+            // calculates the mean
+            for (int j = 0; j < Labels.size(); j++){
+                mean = mean  + features[j][i];
+            }
+            mean = mean / Labels.size();
+            double stDiv = 0.0;
+            for (int j = 0; j < Labels.size(); j++){
+                stDiv = stDiv + Math.pow(features[j][i] - mean,2);
+            }
+            stDiv = Math.sqrt(stDiv/ Labels.size());
 
-        for(int i = 0; i < Labels.size(); i++){
-          for(int j = 2; j < sizeF; j++){
-            stDiv = stDiv + Math.pow(features[i][j-2] - mean,2.0);
-          }
+            for (int j = 0; j < Labels.size(); j++){
+                features[j][i] = (features[j][i] - mean)/stDiv;
+            }
+
         }
-        // z normalization
-        for(int i = 0; i < Labels.size(); i++){
-          for(int j = 2; j < sizeF; j++){
-            features[i][j-2]= (features[i][j-2] - mean)/ stDiv;
-          }
-        }
+
 
         List<Integer> fa = new ArrayList<Integer>();
-        // fa.add(4);
-        // fa.add(8);
+        fa.add(4);
+        fa.add(8);
         double wow = NearestNeighbor(features, fa, Labels );
         // forward(features,sizeF-2,Labels);
 
