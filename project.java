@@ -120,6 +120,33 @@ public class project{
      }
 
 
+        public static double Backward(Double[][] data,int featuresSize,List<Double> Labels ) {
+          List<Integer> features =  new ArrayList<Integer>();
+          for(int i  = 0 ; i < Labels.size(); i++){
+              features.get(i);
+          }
+
+          for(int i  = 0 ; i < Labels.size(); i++){
+            for(int j  = 0 ; j < Labels.size(); j++){
+
+
+
+            }
+
+
+          }
+
+
+          double a = 0.0;
+          return a;
+
+
+      }
+
+
+
+
+
       public  static void main (String args[]){
       List<Double> Labels = new ArrayList<Double>();
       List<String> lines =  new ArrayList<String>();
@@ -189,7 +216,7 @@ public class project{
         fa.add(7);
         double wow  = NearestNeighbor(features, fa, Labels );
         // double wow = forward(features,sizeF,Labels);
-        
+
 
 
 
