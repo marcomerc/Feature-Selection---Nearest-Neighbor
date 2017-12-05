@@ -6,6 +6,7 @@ import java.io.*;
 import java.lang.Math;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Vector;//imports vector utility
 
 public class project{
 
@@ -63,6 +64,8 @@ public class project{
                      System.out.print("Using feature(s) {");
                      for(int m = 0; m < features.size();m++){
                        System.out.print(features.get(m));
+                       System.out.print(" ");
+
                      }
                      System.out.print("} accuracy is ");
                      System.out.print(percentageRight);
@@ -90,7 +93,8 @@ public class project{
 
           System.out.print("(Warning, Accuracy has decreased! Continuing search in case of local maxima) \nFeature set { ");
           for(int m = 0; m + 1 < features.size();m++){
-            System.out.print(features.get(m));
+            System.out.print(features.get(m) + 1);
+            System.out.print(" ");
           }
           System.out.print("} was best, accuracy is  ");
           System.out.print(percent.get(percent.size()-2));
@@ -103,7 +107,8 @@ public class project{
                 features.add(loc);
                 System.out.print("Feature set {");
                 for(int m = 0; m < features.size();m++){
-                  System.out.print(features.get(m));
+                  System.out.print(features.get(m) + 1);
+                  System.out.print(" ");
                 }
                 System.out.print("} was the best, accuracy is ");
                 System.out.print(percent.get(percent.size()-1));
@@ -122,20 +127,65 @@ public class project{
 
         public static double Backward(Double[][] data,int featuresSize,List<Double> Labels ) {
           List<Integer> features =  new ArrayList<Integer>();
-          for(int i  = 0 ; i < Labels.size(); i++){
-              features.get(i);
+          for(int i  = 0 ; i < featuresSize; i++){
+              features.add(i);
+          }
+          for(int i  = 0 ; i < featuresSize; i++){
+              // System.out.println(features.get(i));
           }
 
           for(int i  = 0 ; i < Labels.size(); i++){
-            for(int j  = 0 ; j < Labels.size(); j++){
+            List<Integer> tempF =  new ArrayList<Integer>(features);
+            double[] featLoc = new double[features.size()];
+            double[] cross = new double[features.size()];
+            // System.out.println(features.size());
+            // System.out.println(tempF.size());
+            int loc = -1;
+            System.out.print("size ");
+            System.out.println(features.size());
+            System.out.print(" ");
+            int sizeTemp = features.size();
+            for(int k  = 0 ; k < sizeTemp; k++){
 
+              features.remove(tempF.get(k));
+              cross[k]  = NearestNeighbor(data,features,Labels);
+              features.add(k,tempF.get(k));
+              System.out.print(cross[k]);
+              System.out.print(" ");
 
-
+              System.out.println(tempF.get(k) );
             }
 
 
-          }
+            double max = -1;
 
+            if(features.size() == 2){
+              break;
+            }
+            System.out.print("finding th max\n");
+            // //
+            for(int j  = 0 ; j < tempF.size(); j++){
+              if(max == -1){
+                  max = cross[j];
+                  loc =j;
+                  System.out.print(loc);
+                  System.out.print(" ");
+                  System.out.print(max);
+                  System.out.print("\n");
+               }else if (max < cross[j]){
+                  max = cross[j];
+                  loc = j;
+                  System.out.print(loc);
+                  System.out.print(" ");
+                  System.out.print(max);
+                    System.out.print("\n");
+              }
+            }
+              System.out.print("\nloc");
+            System.out.println(loc);
+             features.remove(loc);
+              tempF.remove(loc);
+          }
 
           double a = 0.0;
           return a;
@@ -154,6 +204,7 @@ public class project{
       // Scanner scan = new Scanner(System.in);
       // String fileName = scan.nextLine();
       String fileName = "CS170Smalltestdata__22.txt";
+      // String fileName = "CS170BIGtestdata__37.txt";
       try {
       			File file = new File(fileName);
       			FileReader fileReader = new FileReader(file);
@@ -214,14 +265,13 @@ public class project{
         List<Integer> fa = new ArrayList<Integer>();
         fa.add(3);
         fa.add(7);
-        double wow  = NearestNeighbor(features, fa, Labels );
+        // double wow  = NearestNeighbor(features, fa, Labels );
         // double wow = forward(features,sizeF,Labels);
+        double wow = Backward(features,sizeF,Labels);
 
 
 
 
-
-
-        System.out.print(wow);
+        // System.out.print(wow);
     }
   }
