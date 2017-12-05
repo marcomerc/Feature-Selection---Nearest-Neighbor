@@ -141,9 +141,7 @@ public class project{
             // System.out.println(features.size());
             // System.out.println(tempF.size());
             int loc = -1;
-            System.out.print("size ");
-            System.out.println(features.size());
-            System.out.print(" ");
+            System.out.println("features");
             int sizeTemp = features.size();
             for(int k  = 0 ; k < sizeTemp; k++){
 
@@ -151,9 +149,9 @@ public class project{
               cross[k]  = NearestNeighbor(data,features,Labels);
               features.add(k,tempF.get(k));
               System.out.print(cross[k]);
-              System.out.print(" ");
+              System.out.print(" feature ");
 
-              System.out.println(tempF.get(k) );
+              System.out.println(tempF.get(k) + 1);
             }
 
 
@@ -162,33 +160,25 @@ public class project{
             if(features.size() == 2){
               break;
             }
-            System.out.print("finding th max\n");
-            // //
             for(int j  = 0 ; j < tempF.size(); j++){
               if(max == -1){
                   max = cross[j];
                   loc =j;
-                  System.out.print(loc);
-                  System.out.print(" ");
-                  System.out.print(max);
-                  System.out.print("\n");
                }else if (max < cross[j]){
                   max = cross[j];
                   loc = j;
-                  System.out.print(loc);
-                  System.out.print(" ");
-                  System.out.print(max);
-                    System.out.print("\n");
               }
             }
-              System.out.print("\nloc");
-            System.out.println(loc);
+
+            System.out.print("remove feature ");
+            System.out.println(features.get(loc)+1);
              features.remove(loc);
               tempF.remove(loc);
           }
 
-          double a = 0.0;
-          return a;
+
+          double result  = NearestNeighbor(data,features,Labels);
+          return result;
 
 
       }
@@ -203,8 +193,8 @@ public class project{
       int sizeF = 0;
       // Scanner scan = new Scanner(System.in);
       // String fileName = scan.nextLine();
-      String fileName = "CS170Smalltestdata__22.txt";
-      // String fileName = "CS170BIGtestdata__37.txt";
+      // String fileName = "CS170Smalltestdata__22.txt";
+      String fileName = "CS170BIGtestdata__37.txt";
       try {
       			File file = new File(fileName);
       			FileReader fileReader = new FileReader(file);
@@ -272,6 +262,6 @@ public class project{
 
 
 
-        // System.out.print(wow);
+        System.out.print(wow);
     }
   }
