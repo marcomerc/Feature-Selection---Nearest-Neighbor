@@ -118,13 +118,8 @@ public class project{
 
 
 }
-
-
         return percent.get(percent.size()-2);
-
      }
-
-
         public static double Backward(Double[][] data,int featuresSize,List<Double> Labels ) {
           List<Integer> features =  new ArrayList<Integer>();
           for(int i  = 0 ; i < featuresSize; i++){
@@ -153,8 +148,6 @@ public class project{
 
               System.out.println(tempF.get(k) + 1);
             }
-
-
             double max = -1;
 
             if(features.size() == 2){
@@ -175,18 +168,9 @@ public class project{
              features.remove(loc);
               tempF.remove(loc);
           }
-
-
           double result  = NearestNeighbor(data,features,Labels);
           return result;
-
-
       }
-
-
-
-
-
       public  static void main (String args[]){
       List<Double> Labels = new ArrayList<Double>();
       List<String> lines =  new ArrayList<String>();
@@ -226,7 +210,6 @@ public class project{
             double mean = 0.0;
             // calculates the mean
             for (int j = 0; j < Labels.size(); j++){
-                // System.out.println(features[j][i]);
                 mean = mean  + features[j][i];
             }
             mean = mean / Labels.size();
@@ -237,15 +220,9 @@ public class project{
                 stDiv = stDiv + Math.pow(features[j][i] - mean,2);
             }
             stDiv = Math.sqrt(stDiv/ Labels.size());
-            // System.out.println("stDiv");
-            // System.out.println(stDiv);
-
             for (int j = 0; j < Labels.size(); j++){
                 features[j][i] = (features[j][i] - mean)/stDiv;
             }
-
-
-
         }
         System.out.println(features[0][0]);
         System.out.println(features[1][1]);
@@ -258,10 +235,6 @@ public class project{
         // double wow  = NearestNeighbor(features, fa, Labels );
         // double wow = forward(features,sizeF,Labels);
         double wow = Backward(features,sizeF,Labels);
-
-
-
-
         System.out.print(wow);
     }
   }
