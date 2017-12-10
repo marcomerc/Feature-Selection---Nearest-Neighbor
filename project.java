@@ -86,11 +86,8 @@ public class project{
           }
 
         if(!percent.isEmpty() && previousPer < percent.get(percent.size()-1)){
-
-
           percent.add(previousPer);
           features.add(loc);
-
           System.out.print("(Warning, Accuracy has decreased! Continuing search in case of local maxima) \nFeature set { ");
           for(int m = 0; m + 1 < features.size();m++){
             System.out.print(features.get(m) + 1);
@@ -121,6 +118,8 @@ public class project{
         return percent.get(percent.size()-2);
      }
         public static double Backward(Double[][] data,int featuresSize,List<Double> Labels ) {
+          double maxAccuracy =  0;
+          List<Integer> ansFeatures =  new ArrayList<Integer>();
           List<Integer> features =  new ArrayList<Integer>();
           for(int i  = 0 ; i < featuresSize; i++){
               features.add(i);
@@ -140,19 +139,33 @@ public class project{
             int sizeTemp = features.size();
             for(int k  = 0 ; k < sizeTemp; k++){
 
+
               features.remove(tempF.get(k));
               cross[k]  = NearestNeighbor(data,features,Labels);
+              if(i == 0){
+                maxAccuracy = cross[k];
+                for(int featuresChoosen = 0; featuresChoosen < features.size();featuresChoosen++  ){
+                  ansFeatures.add(features.get(featuresChoosen)+1);
+                }
+
+              }else if( maxAccuracy < cross[k]){
+                ansFeatures.clear();
+                maxAccuracy = cross[k];
+                for(int featuresChoosen = 0; featuresChoosen < features.size();featuresChoosen++  ){
+                  ansFeatures.add(features.get(featuresChoosen)+1);
+
+                }
+
+
+              }
               features.add(k,tempF.get(k));
               System.out.print(cross[k]);
               System.out.print(" feature ");
-
               System.out.println(tempF.get(k) + 1);
             }
             double max = -1;
 
-            if(features.size() == 2){
-              break;
-            }
+
             for(int j  = 0 ; j < tempF.size(); j++){
               if(max == -1){
                   max = cross[j];
@@ -163,13 +176,23 @@ public class project{
               }
             }
 
+
             System.out.print("remove feature ");
             System.out.println(features.get(loc)+1);
              features.remove(loc);
               tempF.remove(loc);
+              if(features.size() == 0){
+                break;
+              }
           }
-          double result  = NearestNeighbor(data,features,Labels);
-          return result;
+            System.out.print("features choosen ");
+          for(int featuresChoosen = 0; featuresChoosen < ansFeatures.size();featuresChoosen++  ){
+            System.out.print(ansFeatures.get(featuresChoosen));
+            System.out.print(" ");
+          }
+            System.out.print("\nAccuracy ");
+            System.out.print(maxAccuracy);
+          return maxAccuracy;
       }
       public  static void main (String args[]){
       List<Double> Labels = new ArrayList<Double>();
@@ -177,8 +200,8 @@ public class project{
       int sizeF = 0;
       // Scanner scan = new Scanner(System.in);
       // String fileName = scan.nextLine();
-      // String fileName = "CS170Smalltestdata__22.txt";
-      String fileName = "CS170BIGtestdata__37.txt";
+      String fileName = "CS170Smalltestdata__22.txt";
+      // String fileName = "CS170BIGtestdata__37.txt";
       try {
       			File file = new File(fileName);
       			FileReader fileReader = new FileReader(file);
@@ -227,14 +250,12 @@ public class project{
         System.out.println(features[0][0]);
         System.out.println(features[1][1]);
 
-
-
         List<Integer> fa = new ArrayList<Integer>();
         fa.add(3);
         fa.add(7);
         // double wow  = NearestNeighbor(features, fa, Labels );
         // double wow = forward(features,sizeF,Labels);
         double wow = Backward(features,sizeF,Labels);
-        System.out.print(wow);
+        // System.out.print(wow);
     }
   }
