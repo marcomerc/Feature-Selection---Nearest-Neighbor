@@ -49,12 +49,14 @@ public class project{
      public static double forward(Double[][] data,int featuresSize,List<Double> Labels ) {
         List<Integer> features =  new ArrayList<Integer>();
         List<Double> percent =  new ArrayList<Double>();
+        List<Integer> ansLoc =  new ArrayList<Integer>();
 
-
+  double minA = 0;
         int numI = -1;
         for(int i = 0; i < featuresSize; i++){
           int loc =0;
           double previousPer = 0.0;
+
           for(int j = 0; j < featuresSize; j++){
                  if ( !features.contains(j)){
                      features.add(j);
@@ -70,6 +72,16 @@ public class project{
                      System.out.print("} accuracy is ");
                      System.out.print(percentageRight);
                      System.out.print("%\n");
+                     if (i == 0  && j == 0){
+                       minA = percentageRight;
+                       ansLoc.clear();
+                       ansLoc.addAll(features);
+                     }else if (minA < percentageRight){
+                       ansLoc.clear();
+                       ansLoc.addAll(features);
+                       minA = percentageRight;
+
+                     }
                      if (j == 0){
 
                             loc = j;
@@ -97,7 +109,6 @@ public class project{
           System.out.print(percent.get(percent.size()-2));
           System.out.print("%\n");
           numI = numI+1;
-        break;
 
         } else{
                 percent.add(previousPer);
@@ -115,8 +126,134 @@ public class project{
 
 
 }
-        return percent.get(percent.size()-2);
+    System.out.print("the features that give the best accuracy are ");
+    for(int i =0; i < ansLoc.size(); i++){
+      System.out.print(ansLoc.get(i));
+      System.out.print(" ");
+
+    }
+
+        // return percent.get(percent.size()-2);
+        return minA;
      }
+
+     public static double ThirdAlgorithm(Double[][] data,int featuresSize,List<Double> Labels ) {
+        List<Integer> features =  new ArrayList<Integer>();
+        List<Double> percent =  new ArrayList<Double>();
+        List<Integer> ansLoc =  new ArrayList<Integer>();
+
+        double minA = 0;
+        int numI = -1;
+        double first = 0.0;
+        double second = 0.0;
+        int countHills = 0;
+
+
+        for(int i = 0; i < featuresSize; i++){
+          int loc =0;
+          double previousPer = 0.0;
+
+
+          for(int j = 0; j < featuresSize; j++){
+                 if ( !features.contains(j)){
+                     features.add(j);
+                     numI = numI+1;
+                     double percentageRight = NearestNeighbor(data,features,Labels);
+
+                     System.out.print("Using feature(s) {");
+                     for(int m = 0; m < features.size();m++){
+                       System.out.print(features.get(m));
+                       System.out.print(" ");
+
+                     }
+                     System.out.print("} accuracy is ");
+                     System.out.print(percentageRight);
+                     System.out.print("%\n");
+                     if (i == 0  && j == 0){
+                       minA = percentageRight;
+                       ansLoc.clear();
+                       ansLoc.addAll(features);
+                     }else if (minA < percentageRight){
+                       ansLoc.clear();
+                       ansLoc.addAll(features);
+                       minA = percentageRight;
+
+                     }
+                     if (j == 0){
+
+                            loc = j;
+                            previousPer = percentageRight;
+                     }
+                    if(previousPer < percentageRight){
+                            loc = j;
+                            previousPer = percentageRight;
+                    }
+
+                    features.remove(numI);
+                    numI = numI-1;
+                  }
+          }
+          if (i == 0){
+            first = previousPer;
+          }else if(i == 1){
+            second = previousPer;
+          }
+          if(first < second && second > previousPer && i >= 2){
+            countHills = countHills + 1;
+          }else{
+            first = second;
+            second = previousPer;
+          }
+
+
+
+
+        if(!percent.isEmpty() && previousPer < percent.get(percent.size()-1)){
+          percent.add(previousPer);
+          features.add(loc);
+          System.out.print("(Warning, Accuracy has decreased! Continuing search in case of local maxima) \nFeature set { ");
+          for(int m = 0; m + 1 < features.size();m++){
+            System.out.print(features.get(m) + 1);
+            System.out.print(" ");
+          }
+          System.out.print("} was best, accuracy is  ");
+          System.out.print(percent.get(percent.size()-2));
+          System.out.print("%\n");
+          numI = numI+1;
+
+        } else{
+                percent.add(previousPer);
+                features.add(loc);
+                System.out.print("Feature set {");
+                for(int m = 0; m < features.size();m++){
+                  System.out.print(features.get(m) + 1);
+                  System.out.print(" ");
+                }
+                System.out.print("} was the best, accuracy is ");
+                System.out.print(percent.get(percent.size()-1));
+                System.out.print("%\n");
+                numI = numI+1;
+        }
+        if(countHills == 3){
+          System.out.println(countHills);
+          break;
+        }
+
+      }
+    System.out.print("the features that give the best accuracy are ");
+    for(int i =0; i < ansLoc.size(); i++){
+      System.out.print(ansLoc.get(i));
+      System.out.print(" ");
+
+    }
+
+        // return percent.get(percent.size()-2);
+        return minA;
+}
+
+
+
+
         public static double Backward(Double[][] data,int featuresSize,List<Double> Labels ) {
           double maxAccuracy =  0;
           List<Integer> ansFeatures =  new ArrayList<Integer>();
@@ -200,8 +337,8 @@ public class project{
       int sizeF = 0;
       // Scanner scan = new Scanner(System.in);
       // String fileName = scan.nextLine();
-      String fileName = "CS170Smalltestdata__22.txt";
-      // String fileName = "CS170BIGtestdata__37.txt";
+      // String fileName = "CS170Smalltestdata__22.txt";
+      String fileName = "CS170BIGtestdata__37.txt";
       try {
       			File file = new File(fileName);
       			FileReader fileReader = new FileReader(file);
@@ -255,7 +392,10 @@ public class project{
         fa.add(7);
         // double wow  = NearestNeighbor(features, fa, Labels );
         // double wow = forward(features,sizeF,Labels);
-        double wow = Backward(features,sizeF,Labels);
-        // System.out.print(wow);
+        double wow = ThirdAlgorithm(features,sizeF,Labels);
+
+        // double wow = Backward(features,sizeF,Labels);
+        System.out.print(" the accuracy is ");
+        System.out.println(wow);
     }
   }
