@@ -4,7 +4,7 @@ Feature selection algorithms
 ## Getting Started
 
 To clone
-Git clone https://github.com/marcomerc/The-eight-puzzle.git
+Git clone https://github.com/marcomerc/Feature-Selection---Nearest-Neighbor
 
 ### Prerequisites
 
